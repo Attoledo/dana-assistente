@@ -46,8 +46,8 @@ if doc_texto:
         resumo = gerar_resumo(chat, doc_texto)
         st.markdown("## 📝 Resumo do Conteúdo")
         st.markdown(resumo)
-        salvar_como_txt(resumo, "resumo_llama3.txt")
-        salvar_como_pdf(resumo, "resumo_llama3.pdf")
+        salvar_como_txt(resumo, "resumo.txt")
+        salvar_como_pdf(resumo, "resumo.pdf")
         st.download_button("📄 Baixar Resumo (.txt)", data=resumo, file_name="resumo_llama3.txt")
         with open("resumo_llama3.pdf", "rb") as f:
             st.download_button("📄 Baixar Resumo (.pdf)", data=f, file_name="resumo_llama3.pdf")
