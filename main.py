@@ -48,9 +48,9 @@ if doc_texto:
         st.markdown(resumo)
         salvar_como_txt(resumo, "resumo.txt")
         salvar_como_pdf(resumo, "resumo.pdf")
-        st.download_button("📄 Baixar Resumo (.txt)", data=resumo, file_name="resumo_llama3.txt")
+        st.download_button("📄 Baixar Resumo (.txt)", data=resumo, file_name="resumo.txt")
         with open("resumo_llama3.pdf", "rb") as f:
-            st.download_button("📄 Baixar Resumo (.pdf)", data=f, file_name="resumo_llama3.pdf")
+            st.download_button("📄 Baixar Resumo (.pdf)", data=f, file_name="resumo.pdf")
 
     iniciar_assistente(chat, doc_texto)
 
