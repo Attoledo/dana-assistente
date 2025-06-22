@@ -24,18 +24,34 @@ def processar_youtube():
     if url:
         try:
             clean_url = url.split("&")[0]
+
+            # 🧹 Limpa arquivos .vtt antigos
+            for f in os.listdir():
+                if f.endswith(".vtt"):
+                    os.remove(f)
+
+            # 🛠️ Tenta baixar legendas automáticas (português ou inglês como fallback)
             subprocess.run(
-                f'yt-dlp --write-auto-sub --sub-lang pt --skip-download --output "legenda.%(ext)s" "{clean_url}"',
-                shell=True, check=True
+                f'yt-dlp --write-auto-sub --sub-lang "pt,en" --skip-download --output "legenda.%(ext)s" "{clean_url}"',
+                shell=True,
+                check=True
             )
-            vtt_name = next((f for f in os.listdir() if f.startswith("legenda") and f.endswith(".vtt")), None)
-            if vtt_name:
-                texto = processar_legenda_sem_repeticoes(vtt_name)
-                os.remove(vtt_name)
-                return texto
-            else:
-                st.error("❌ Legenda não encontrada.")
+
+            # 🔎 Busca qualquer .vtt disponível
+            vtt_name = next((f for f in os.listdir() if f.endswith(".vtt")), None)
+
+            if not vtt_name:
+                st.warning("⚠️ Legenda automática não encontrada para este vídeo. Tente outro link.")
+                return ""
+
+            # ✅ Processa e retorna o texto limpo
+            texto = processar_legenda_sem_repeticoes(vtt_name)
+            os.remove(vtt_name)
+            return texto
+
+        except subprocess.CalledProcessError as e:
+            st.error(f"❌ yt-dlp falhou ao baixar a legenda: {e}")
         except Exception as e:
-            st.error(f"Erro ao processar vídeo: {e}")
+            st.error(f"❌ Erro inesperado: {e}")
     return ""
 
